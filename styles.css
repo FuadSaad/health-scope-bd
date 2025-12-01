@@ -1280,6 +1280,80 @@ textarea.form-input {
     margin-bottom: 2rem;
 }
 
+/* Footer social icons: place near the FOOTER section in styles.css */
+.social-section-center {
+    text-align: center;
+    padding: 2rem 0;
+    grid-column: 1 / -1;
+}
+
+.social-section-center .social-links {
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.social-section-center .section-description {
+    margin-bottom: 0;
+}
+
+.footer-social {
+    margin-top: 0.75rem;
+}
+
+.footer-social h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+}
+
+.social-links {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+}
+
+.social-links a {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(2, 6, 23, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.social-links a svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+}
+
+/* hover uses your primary green accent */
+.social-links a:hover,
+.social-links a:focus {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(59, 130, 246, 0.06));
+    outline: none;
+    border-color: rgba(16, 185, 129, 0.15);
+}
+
+/* small screens: keep footer tidy */
+@media (max-width: 600px) {
+    .footer-social {
+        margin-top: 1rem;
+    }
+
+    .social-links a {
+        width: 40px;
+        height: 40px;
+    }
+}
+
 .footer-logo {
     display: flex;
     align-items: center;
