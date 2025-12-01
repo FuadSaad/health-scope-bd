@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="HealthScope BD - Digital health platform for Bangladesh with symptom checker, disease trends, and community reporting">
+    <meta name="keywords" content="health, Bangladesh, symptom checker, disease trends, healthcare">
+    <title>HealthScope BD - Your Digital Health Companion</title>
+
+    <!-- Leaflet CSS for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-wrapper">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <path
+                            d="M20 5C11.716 5 5 11.716 5 20C5 28.284 11.716 35 20 35C28.284 35 35 28.284 35 20C35 11.716 28.284 5 20 5Z"
+                            fill="url(#gradient1)" />
+                        <path
+                            d="M20 12C15.582 12 12 15.582 12 20C12 24.418 15.582 28 20 28C24.418 28 28 24.418 28 20C28 15.582 24.418 12 20 12Z"
+                            fill="white" />
+                        <circle cx="20" cy="20" r="4" fill="url(#gradient1)" />
+                        <defs>
+                            <linearGradient id="gradient1" x1="5" y1="5" x2="35" y2="35">
+                                <stop offset="0%" stop-color="#10b981" />
+                                <stop offset="100%" stop-color="#059669" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">HealthScope <span class="bd">BD</span></span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#symptom-checker" class="nav-link">Symptom Checker</a></li>
+                <li><a href="#trends" class="nav-link">Disease Trends</a></li>
+                <li><a href="#report" class="nav-link">Report</a></li>
+                <li><a href="#footer" class="nav-link">About Us</a></li>
+            </ul>
+
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-bg"></div>
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    Your Digital Health<br />
+                    <span class="gradient-text">Companion</span>
+                </h1>
+                <p class="hero-description">
+                    Track symptoms, discover health trends in Bangladesh, and get personalized health insights powered
+                    by community data.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToSection('symptom-checker')">
+                        <span>Check Symptoms</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <button class="btn btn-secondary" onclick="scrollToSection('trends')">
+                        <span>View Trends</span>
+                    </button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card card-1">
+                    <div class="card-icon">🩺</div>
+                    <div class="card-text">
+                        <div class="card-title">Symptom Checker</div>
+                        <div class="card-desc">AI-powered analysis</div>
+                    </div>
+                </div>
+                <div class="floating-card card-2">
+                    <div class="card-icon">📊</div>
+                    <div class="card-text">
+                        <div class="card-title">Live Trends</div>
+                        <div class="card-desc">Real-time tracking</div>
+                    </div>
+                </div>
+                <div class="floating-card card-3">
+                    <div class="card-icon">🗺️</div>
+                    <div class="card-text">
+                        <div class="card-title">Regional Map</div>
+                        <div class="card-desc">Bangladesh coverage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Symptom Checker Section -->
+    <section id="symptom-checker" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Symptom Checker</h2>
+                <p class="section-description">Select your symptoms to get possible health conditions and
+                    recommendations</p>
+            </div>
+
+            <div class="checker-layout">
+                <div class="symptom-input-panel">
+                    <div class="panel-card">
+                        <h3 class="panel-title">Select Your Symptoms</h3>
+
+                        <div class="search-box">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <circle cx="9" cy="9" r="6" stroke="#6b7280" stroke-width="2" />
+                                <path d="M14 14L18 18" stroke="#6b7280" stroke-width="2" stroke-linecap="round" />
+                            </svg>
+                            <input type="text" id="symptom-search" placeholder="Search symptoms..." />
+                        </div>
+
+                        <div class="selected-symptoms" id="selected-symptoms">
+                            <!-- Selected symptoms will appear here -->
+                        </div>
+
+                        <div class="symptom-categories">
+                            <div class="category">
+                                <h4 class="category-title">Common Symptoms</h4>
+                                <div class="symptom-chips">
+                                    <div class="symptom-chip" data-symptom="fever" data-severity="3">
+                                        <span>Fever</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="cough" data-severity="2">
+                                        <span>Cough</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="headache" data-severity="2">
+                                        <span>Headache</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="fatigue" data-severity="2">
+                                        <span>Fatigue</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="body_ache" data-severity="2">
+                                        <span>Body Ache</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="sore_throat" data-severity="2">
+                                        <span>Sore Throat</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="category">
+                                <h4 class="category-title">Respiratory</h4>
+                                <div class="symptom-chips">
+                                    <div class="symptom-chip" data-symptom="shortness_of_breath" data-severity="4">
+                                        <span>Shortness of Breath</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="chest_pain" data-severity="5">
+                                        <span>Chest Pain</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="wheezing" data-severity="3">
+                                        <span>Wheezing</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="runny_nose" data-severity="1">
+                                        <span>Runny Nose</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="category">
+                                <h4 class="category-title">Digestive</h4>
+                                <div class="symptom-chips">
+                                    <div class="symptom-chip" data-symptom="nausea" data-severity="2">
+                                        <span>Nausea</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="vomiting" data-severity="3">
+                                        <span>Vomiting</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="diarrhea" data-severity="3">
+                                        <span>Diarrhea</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="abdominal_pain" data-severity="3">
+                                        <span>Abdominal Pain</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="loss_of_appetite" data-severity="2">
+                                        <span>Loss of Appetite</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="category">
+                                <h4 class="category-title">Other Symptoms</h4>
+                                <div class="symptom-chips">
+                                    <div class="symptom-chip" data-symptom="rash" data-severity="2">
+                                        <span>Rash</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="joint_pain" data-severity="3">
+                                        <span>Joint Pain</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="chills" data-severity="3">
+                                        <span>Chills</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="dizziness" data-severity="3">
+                                        <span>Dizziness</span>
+                                    </div>
+                                    <div class="symptom-chip" data-symptom="sweating" data-severity="2">
+                                        <span>Sweating</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary btn-block" id="analyze-btn" disabled>
+                            <span>Analyze Symptoms</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="results-panel" id="results-panel">
+                    <div class="panel-card">
+                        <div class="empty-state">
+                            <div class="empty-icon">🔍</div>
+                            <h3>No Analysis Yet</h3>
+                            <p>Select symptoms from the left panel and click "Analyze Symptoms" to get results</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disease Trends Map Section -->
+    <section id="trends" class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Disease Trends in Bangladesh</h2>
+                <p class="section-description">Real-time visualization of disease reports across different regions</p>
+            </div>
+
+            <div class="map-controls">
+                <div class="control-group">
+                    <label for="time-filter">Time Period:</label>
+                    <select id="time-filter" class="select-input">
+                        <option value="24h">Last 24 Hours</option>
+                        <option value="7d" selected>Last 7 Days</option>
+                        <option value="30d">Last 30 Days</option>
+                        <option value="90d">Last 3 Months</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="map-container">
+                <div id="disease-map"></div>
+                <div class="map-legend">
+                    <h4>Heat Intensity</h4>
+                    <div class="legend-scale">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: rgba(16, 185, 129, 0.3)"></div>
+                            <span>Low</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: rgba(245, 158, 11, 0.5)"></div>
+                            <span>Medium</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: rgba(239, 68, 68, 0.7)"></div>
+                            <span>High</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="total-reports">1,247</div>
+                        <div class="stat-label">Total Reports</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="hotspot-count">8</div>
+                        <div class="stat-label">Active Hotspots</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📍</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="affected-areas">23</div>
+                        <div class="stat-label">Affected Districts</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="severity-level">Medium</div>
+                        <div class="stat-label">Alert Level</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Report Disease Section -->
+    <section id="report" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Report a Disease</h2>
+                <p class="section-description">Help your community by reporting disease cases in your area</p>
+            </div>
+
+            <div class="report-layout">
+                <div class="report-form-container">
+                    <form id="report-form" class="report-form">
+                        <div class="form-group">
+                            <label for="disease-type">Disease Type *</label>
+                            <select id="disease-type" required class="form-input">
+                                <option value="">Select disease</option>
+                                <option value="flu">Seasonal Flu</option>
+                                <option value="dengue">Dengue Fever</option>
+                                <option value="covid">COVID-19</option>
+                                <option value="gastroenteritis">Gastroenteritis</option>
+                                <option value="typhoid">Typhoid</option>
+                                <option value="chickenpox">Chickenpox</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="severity">Severity Level *</label>
+                            <div class="severity-selector">
+                                <input type="radio" name="severity" id="mild" value="mild" required>
+                                <label for="mild" class="severity-option severity-mild">
+                                    <span class="severity-icon">😊</span>
+                                    <span>Mild</span>
+                                </label>
+
+                                <input type="radio" name="severity" id="moderate" value="moderate">
+                                <label for="moderate" class="severity-option severity-moderate">
+                                    <span class="severity-icon">😐</span>
+                                    <span>Moderate</span>
+                                </label>
+
+                                <input type="radio" name="severity" id="severe" value="severe">
+                                <label for="severe" class="severity-option severity-severe">
+                                    <span class="severity-icon">😰</span>
+                                    <span>Severe</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="division">Division *</label>
+                                <select id="division" required class="form-input">
+                                    <option value="">Select division</option>
+                                    <option value="dhaka">Dhaka</option>
+                                    <option value="chittagong">Chittagong</option>
+                                    <option value="rajshahi">Rajshahi</option>
+                                    <option value="khulna">Khulna</option>
+                                    <option value="barisal">Barisal</option>
+                                    <option value="sylhet">Sylhet</option>
+                                    <option value="rangpur">Rangpur</option>
+                                    <option value="mymensingh">Mymensingh</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="district">District *</label>
+                                <select id="district" required class="form-input">
+                                    <option value="">Select district</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">Specific Location</label>
+                            <input type="text" id="location" class="form-input" placeholder="e.g., Mirpur, Sector 10">
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="use-geolocation">
+                                Use my current location
+                            </label>
+                            <div id="geo-status" class="geo-status"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="symptoms">Symptoms Observed</label>
+                            <textarea id="symptoms" class="form-input" rows="3"
+                                placeholder="Describe the symptoms..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="additional-info">Additional Information</label>
+                            <textarea id="additional-info" class="form-input" rows="3"
+                                placeholder="Any other relevant details..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <span>Submit Report</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M17 3L8 12M17 3L11 17L8 12M17 3L3 9L8 12" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="report-info">
+                    <div class="info-card">
+                        <h3>Why Report?</h3>
+                        <ul class="info-list">
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path
+                                        d="M7 10L9 12L13 8M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z"
+                                        stroke="#10b981" stroke-width="2" />
+                                </svg>
+                                <span>Help track disease outbreaks in your community</span>
+                            </li>
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path
+                                        d="M7 10L9 12L13 8M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z"
+                                        stroke="#10b981" stroke-width="2" />
+                                </svg>
+                                <span>Enable early warning systems</span>
+                            </li>
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path
+                                        d="M7 10L9 12L13 8M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z"
+                                        stroke="#10b981" stroke-width="2" />
+                                </svg>
+                                <span>Contribute to public health data</span>
+                            </li>
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path
+                                        d="M7 10L9 12L13 8M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z"
+                                        stroke="#10b981" stroke-width="2" />
+                                </svg>
+                                <span>Anonymous and secure reporting</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card privacy-notice">
+                        <h3>🔒 Privacy Notice</h3>
+                        <p>Your personal information is kept confidential. We only use aggregated data to track disease
+                            trends and protect public health.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Health Tips Section -->
+    <section class="section section-tips">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Personalized Health Tips</h2>
+                <p class="section-description">Stay healthy with recommendations based on current trends</p>
+            </div>
+
+            <div class="tips-grid" id="health-tips">
+                <!-- Tips will be dynamically loaded -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <div class="logo-icon">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <path
+                                    d="M20 5C11.716 5 5 11.716 5 20C5 28.284 11.716 35 20 35C28.284 35 35 28.284 35 20C35 11.716 28.284 5 20 5Z"
+                                    fill="url(#gradient2)" />
+                                <path
+                                    d="M20 12C15.582 12 12 15.582 12 20C12 24.418 15.582 28 20 28C24.418 28 28 24.418 28 20C28 15.582 24.418 12 20 12Z"
+                                    fill="white" />
+                                <circle cx="20" cy="20" r="4" fill="url(#gradient2)" />
+                                <defs>
+                                    <linearGradient id="gradient2" x1="5" y1="5" x2="35" y2="35">
+                                        <stop offset="0%" stop-color="#10b981" />
+                                        <stop offset="100%" stop-color="#059669" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <span class="logo-text">HealthScope <span class="bd">BD</span></span>
+                    </div>
+                    <p class="footer-description">
+                        Empowering Bangladesh with digital health solutions for a healthier tomorrow.
+                    </p>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#symptom-checker">Symptom Checker</a></li>
+                        <li><a href="#trends">Disease Trends</a></li>
+                        <li><a href="#report">Report Disease</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Health Guidelines</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:contactwithfuad@gmail.com">📧 contactwithfuad@gmail.com</a></li>
+                        <li><a href="tel:+8801943033803">📱 +880 1943-033803</a></li>
+                        <li>📍 Dhaka, Bangladesh</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 HealthScope BD. All rights reserved.</p>
+                <p class="disclaimer">⚠️ This platform provides general health information and should not replace
+                    professional medical advice.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Custom JavaScript -->
+    <script src="app.js"></script>
+</body>
+
+</html>
